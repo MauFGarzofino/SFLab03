@@ -13,5 +13,14 @@ UCLASS()
 class SFLAB03_API ASFLab03GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+public:
+	ASFLab03GameModeBase();
+	UFUNCTION()
+		void SpawnMyActor();
+	UPROPERTY()
+		class AAMagnetico * SpawnedActor;
+	UFUNCTION()
+		void DestroyActorFunction();
+
+	virtual void BeginPlay() override;
 };

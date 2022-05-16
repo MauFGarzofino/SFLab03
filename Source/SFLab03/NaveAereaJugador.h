@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "NaveAerea.h"
+#include "AMagneticoComponent.h"
 #include "NaveAereaJugador.generated.h"
 
 /**
@@ -29,6 +30,15 @@ public:
 
 	static const FName MoveForwardBinding;
 	static const FName MoveRigthBinding;
+
+	UPROPERTY()
+		UAMagneticoComponent* AMagnetico;
+	UPROPERTY()
+		TMap<FString, int32> AMagneticoInfo;
+	UFUNCTION()
+		virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
+	UFUNCTION()
+		void ShowInventory();
 public:
 
 virtual void Tick(float DeltaSeconds) override;

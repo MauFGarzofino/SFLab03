@@ -26,13 +26,38 @@ ANaveAereaJugador::ANaveAereaJugador()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	// Movement
-	//MoveSpeed = 200.0f;
+	MoveSpeed = 200.0f;
+
+	//Inventario
+	AMagnetico = CreateDefaultSubobject<UAMagneticoComponent>(TEXT("AMagneticoInventory"));
+
+	//ShipInfo
+	AMagneticoInfo.Add("AM1", 0);
+	AMagneticoInfo.Add("AM2", 0);
+	AMagneticoInfo.Add("AM3", 0);
+	AMagneticoInfo.Add("AM4", 0);
+}
+
+
+void ANaveAereaJugador::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	AAMagnetico* AMagneticoItem = Cast<AAMagnetico>(Other);
+	// Por si se choca a otro tipo de objeto
+	if (AMagneticoItem != nullptr)
+	{
+		MoveSpeed = 0;
+	}
+}
+
+void ANaveAereaJugador::ShowInventory()
+{
+	for (auto& Elem : AMagneticoInfo) {
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, FString::Printf(TEXT("% s = % d"), *Elem.Key, Elem.Value));
+	}
 }
 
 void ANaveAereaJugador::Tick(float DeltaSeconds)
 {
-	MoveSpeed = 1000.0f;
-
 	const float ForwardValue = GetInputAxisValue(MoveForwardBinding);
 	const float RigthValue = GetInputAxisValue(MoveRigthBinding);
 
@@ -55,4 +80,5 @@ void ANaveAereaJugador::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAxis(MoveForwardBinding);
 	PlayerInputComponent->BindAxis(MoveRigthBinding);
+	PlayerInputComponent->BindAction(TEXT("MostrarInventario"), IE_Pressed, this, &ANaveAereaJugador::ShowInventory);
 }
